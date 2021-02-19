@@ -1,0 +1,30 @@
+{
+  "name": "audio-visualizer-2",
+  "version": "1.0.0",
+  "description": "",
+  "main": "main.js",
+  "dependencies": {
+    "source-map-support": "^0.5.19",
+    "three": "^0.125.2"
+  },
+  "devDependencies": {
+    "electron": "^11.2.3",
+    "electron-webpack": "^2.8.2",
+    "webpack": "^4.46.0"
+  },
+  "scripts": {
+    "start": "electron-webpack dev",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Megus/audio-visualizer-2.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Megus/audio-visualizer-2/issues"
+  },
+  "homepage": "https://github.com/Megus/audio-visualizer-2#readme"
+}
