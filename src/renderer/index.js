@@ -1,44 +1,40 @@
 import { ipcRenderer } from 'electron';
-import * as THREE from 'three';
 
 import config from '../common/config';
 
-// Initialize HTML
-document.body.style.margin = "0px"
+// Create main canvas
 const mainCanvas = document.createElement("canvas");
 mainCanvas.width = config.width;
 mainCanvas.height = config.height;
 mainCanvas.style.width = `${config.width / 2}px`;
 mainCanvas.style.height = `${config.height / 2}px`;
 
+// Initialize HTML structure
+document.body.style.margin = "0px";
 document.body.appendChild(mainCanvas);
 
-// Initialize ThreeJS Scene
-const scene = new THREE.Scene();
-const camera = new THREE.PerspectiveCamera( 75, window.innerWidth / window.innerHeight, 0.1, 1000 );
+// Create project
+const project = new config.projectClass(config, mainCanvas);
 
-const renderer = new THREE.WebGLRenderer({
-  canvas: mainCanvas,
-});
+// Animation
+let frameNumber = 0;
+let oldTimestamp = 0;
 
-const geometry = new THREE.BoxGeometry();
-const material = new THREE.MeshBasicMaterial( { color: 0x00ff00 } );
-const cube = new THREE.Mesh( geometry, material );
-scene.add( cube );
+function animate(timestampMs) {
+  const timestamp = config.renderVideo ? (frameNumber / config.fps) : (timestampMs / 1000);
+  const dTimestamp = timestamp - oldTimestamp;
 
-camera.position.z = 5;
+  project.renderFrame(timestamp, dTimestamp);
 
-function animate() {
-  cube.rotation.x += 0.01;
-  cube.rotation.y += 0.01;
-	renderer.render(scene, camera);
+  frameNumber++;
+  oldTimestamp = timestamp;
 
-  if (config.renderVideo == true) {
+  if (config.renderVideo) {
     const png = mainCanvas.toDataURL();
     ipcRenderer.sendSync("frame-msg", png);
   }
 
-  requestAnimationFrame( animate );
+  requestAnimationFrame(animate);
 }
 
-animate();
+animate(0);
