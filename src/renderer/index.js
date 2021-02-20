@@ -9,19 +9,26 @@ mainCanvas.height = config.height;
 mainCanvas.style.width = `${config.width / 2}px`;
 mainCanvas.style.height = `${config.height / 2}px`;
 
+// Create project
+const project = new config.projectClass(config, mainCanvas);
+
+// Create audio
+const audio = document.createElement("audio");
+audio.src = project.audioPath;
+audio.loop = true;
+audio.volume = 0.5;
+
 // Initialize HTML structure
 document.body.style.margin = "0px";
 document.body.appendChild(mainCanvas);
-
-// Create project
-const project = new config.projectClass(config, mainCanvas);
+document.body.appendChild(audio);
 
 // Animation
 let frameNumber = 0;
 let oldTimestamp = 0;
 
 function animate(timestampMs) {
-  const timestamp = config.renderVideo ? (frameNumber / config.fps) : (timestampMs / 1000);
+  const timestamp = config.renderVideo ? (frameNumber / config.fps) : (audio.currentTime);
   const dTimestamp = timestamp - oldTimestamp;
 
   project.renderFrame(timestamp, dTimestamp);
@@ -37,4 +44,7 @@ function animate(timestampMs) {
   requestAnimationFrame(animate);
 }
 
-animate(0);
+project.setup().then(() => {
+  audio.play();
+  animate(0);
+});

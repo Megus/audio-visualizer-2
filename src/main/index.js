@@ -3,6 +3,10 @@ import { app, BrowserWindow } from "electron";
 import config from "../common/config";
 import VideoRenderer from "./VideoRenderer";
 
+if (module.hot) {
+  module.hot.accept();
+}
+
 // global reference to mainWindow (necessary to prevent window from being garbage collected)
 let mainWindow;
 let videoRenderer;

@@ -1,17 +1,25 @@
 import * as THREE from 'three';
 
+import AudioAnalyzer from "../../common/AudioAnalyzer";
 import Project from "../../common/Project";
 
 class Project1 extends Project {
   constructor(config, canvas) {
     super(config, canvas);
 
+    this.audioPath = "piotr-3.mp3";
+  }
+
+  async setup() {
+    this.audioAnalyzer = new AudioAnalyzer(`${__static}/${this.audioPath}`);
+    await this.audioAnalyzer.loadAudio();
+
     // Initialize ThreeJS Scene
     this.scene = new THREE.Scene();
-    this.camera = new THREE.PerspectiveCamera(75, config.width / config.height, 0.1, 1000);
+    this.camera = new THREE.PerspectiveCamera(75, this.config.width / this.config.height, 0.1, 1000);
 
     this.renderer = new THREE.WebGLRenderer({
-      canvas: canvas,
+      canvas: this.canvas,
     });
 
     const geometry = new THREE.BoxGeometry();
@@ -23,6 +31,11 @@ class Project1 extends Project {
   }
 
   renderFrame(timestamp, dTimestamp) {
+    const power = this.audioAnalyzer.getPower(timestamp) * 10;
+
+    this.cube.scale.x = power;
+    this.cube.scale.y = power;
+    this.cube.scale.z = power;
     this.cube.rotation.x += dTimestamp;
     this.cube.rotation.y += dTimestamp;
     this.renderer.render(this.scene, this.camera);

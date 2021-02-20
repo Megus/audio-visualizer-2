@@ -4,6 +4,7 @@
   "description": "",
   "main": "main.js",
   "dependencies": {
+    "kissfft-js": "^0.1.8",
     "source-map-support": "^0.5.19",
     "three": "^0.125.2"
   },
