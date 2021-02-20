@@ -4,6 +4,7 @@ export default {
   projectClass: Project1,
   width: 1920,
   height: 1080,
+  muteAudio: true,
   renderVideo: false,
   fps: 60,
   duration: 5, // in seconds

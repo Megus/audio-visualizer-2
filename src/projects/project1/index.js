@@ -3,6 +3,8 @@ import * as THREE from 'three';
 import AudioAnalyzer from "../../common/AudioAnalyzer";
 import Project from "../../common/Project";
 
+const fftSize = 2048;
+
 class Project1 extends Project {
   constructor(config, canvas) {
     super(config, canvas);
@@ -11,7 +13,7 @@ class Project1 extends Project {
   }
 
   async setup() {
-    this.audioAnalyzer = new AudioAnalyzer(`${__static}/${this.audioPath}`);
+    this.audioAnalyzer = new AudioAnalyzer(`${__static}/${this.audioPath}`, fftSize);
     await this.audioAnalyzer.loadAudio();
 
     // Initialize ThreeJS Scene

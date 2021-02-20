@@ -6,7 +6,7 @@ class AudioAnalyzer {
     this.audioPath = audioPath;
 		this.fftSize = fftSize;
 		this.fft = new FFTR(fftSize);
-		this.fftInArray = new Float32Array(fftSize * 2);
+		this.fftInArray = new Float32Array(fftSize);
 		this.channels = [];
 	}
 
@@ -25,7 +25,6 @@ class AudioAnalyzer {
 		for (let c = 0; c < audioBuffer.numberOfChannels; c += 1) {
 			this.channels.push(audioBuffer.getChannelData(c));
 		}
-    console.log(this);
   }
 
   toArrayBuffer(buf) {
@@ -47,14 +46,14 @@ class AudioAnalyzer {
 		const sampleStart = this.timestampToSample(timestamp) - (this.fftSize / 2);
 
 		let i = 0;
-		for (let c = sampleStart; c < sampleStart + this.fftSize; c += 1) {
+		for (let c = sampleStart; c < sampleStart + this.fftSize; c++) {
 			this.fftInArray[i] = this.avgSampleAt(c);
-			i += 2;
+			i++;
 		}
 
 		const out = fft.forward(this.fftInArray);
 
-		for (let c = 0; c < this.fftSize; c += 1) {
+		for (let c = 0; c < this.fftSize / 2; c++) {
 			dataArray[c] = Math.sqrt((out[c * 2] * out[c * 2]) +
 				(out[(c * 2) + 1] * out[(c * 2) + 1])) / this.fftSize;
 		}

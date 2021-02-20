@@ -16,7 +16,12 @@ const project = new config.projectClass(config, mainCanvas);
 const audio = document.createElement("audio");
 audio.src = project.audioPath;
 audio.loop = true;
-audio.volume = 0.5;
+
+if (config.muteAudio) {
+  audio.volume = 0;
+} else {
+  audio.volume = 1;
+}
 
 // Initialize HTML structure
 document.body.style.margin = "0px";
