@@ -1,77 +1,41 @@
-'use strict'
+import { app, BrowserWindow } from "electron";
 
-import { app, BrowserWindow, ipcMain } from 'electron';
-import * as fs from 'fs';
-import * as path from 'path';
-import { format as formatUrl } from 'url';
-
-const isDevelopment = process.env.NODE_ENV !== 'production'
+import config from "../common/config";
+import VideoRenderer from "./VideoRenderer";
 
 // global reference to mainWindow (necessary to prevent window from being garbage collected)
-let mainWindow
+let mainWindow;
+let videoRenderer;
 
 function createMainWindow() {
-  const window = new BrowserWindow({webPreferences: {nodeIntegration: true}})
-
-  /*if (isDevelopment) {
-    window.webContents.openDevTools()
-  }*/
-
-  if (isDevelopment) {
-    window.loadURL(`http://localhost:${process.env.ELECTRON_WEBPACK_WDS_PORT}`)
-  }
-  else {
-    window.loadURL(formatUrl({
-      pathname: path.join(__dirname, 'index.html'),
-      protocol: 'file',
-      slashes: true
-    }))
+  if (config.renderVideo == true) {
+    videoRenderer = new VideoRenderer(config);
+    videoRenderer.start();
   }
 
-  window.on('closed', () => {
-    mainWindow = null
-  })
+  const window = new BrowserWindow({
+    width: config.width / 2,
+    height: config.height / 2,
+    webPreferences: {
+      nodeIntegration: true
+    }
+  });
 
-  window.webContents.on('devtools-opened', () => {
-    window.focus()
-    setImmediate(() => {
-      window.focus()
-    })
-  })
+  window.loadURL(`http://localhost:${process.env.ELECTRON_WEBPACK_WDS_PORT}`);
 
-  return window
+  window.on("closed", () => {
+    mainWindow = null;
+  });
+
+  return window;
 }
 
 // quit application when all windows are closed
-app.on('window-all-closed', () => {
-  // on macOS it is common for applications to stay open until the user explicitly quits
-  if (process.platform !== 'darwin') {
-    app.quit()
-  }
-})
-
-app.on('activate', () => {
-  // on macOS it is common to re-create a window even after all windows have been closed
-  if (mainWindow === null) {
-    mainWindow = createMainWindow()
-  }
-})
+app.on("window-all-closed", () => {
+  app.quit();
+});
 
 // create main BrowserWindow when electron is ready
-app.on('ready', () => {
-  mainWindow = createMainWindow()
-})
-
-
-
-let frameNumber = 0;
-
-
-ipcMain.on("frame-msg", (event, dataURL) => {
-  var base64Data = dataURL.replace(/^data:image\/png;base64,/, "");
-
-  fs.writeFileSync(`out-${frameNumber}.png`, base64Data, 'base64');
-  frameNumber++;
-
-  event.returnValue = "ok";
+app.on("ready", () => {
+  mainWindow = createMainWindow();
 });
