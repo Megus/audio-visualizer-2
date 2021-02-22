@@ -27,5 +27,8 @@
   "bugs": {
     "url": "https://github.com/Megus/audio-visualizer-2/issues"
   },
-  "homepage": "https://github.com/Megus/audio-visualizer-2#readme"
+  "homepage": "https://github.com/Megus/audio-visualizer-2#readme",
+  "electronWebpack": {
+    "staticSourceDirectory": "src/projects"
+  }
 }
