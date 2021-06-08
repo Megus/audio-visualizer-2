@@ -1,6 +1,6 @@
 import { ipcRenderer } from 'electron';
 
-import config from '../common/config';
+import config from '../main/config';
 
 // Create main canvas
 const mainCanvas = document.createElement("canvas");

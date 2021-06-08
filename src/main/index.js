@@ -1,6 +1,6 @@
 import { app, BrowserWindow } from "electron";
 
-import config from "../common/config";
+import config from "./config";
 import VideoRenderer from "./VideoRenderer";
 
 if (module.hot) {
