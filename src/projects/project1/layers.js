@@ -1,9 +1,13 @@
 import * as L from "../../common/layers";
+import CustomLayer from "./CustomLayer";
 
 const layers = [
   {
     layer: L.GroupLayer,
     children: [
+      {
+        layer: CustomLayer,
+      },
       {
         layer: L.ImageLayer,
         p: {

@@ -1,5 +1,3 @@
-import * as THREE from 'three';
-
 import AudioAnalyzer from "../../common/AudioAnalyzer";
 import Project from "../../common/Project";
 import LayerSystem from "../../common/LayerSystem";

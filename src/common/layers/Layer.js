@@ -3,6 +3,7 @@ class Layer {
     this.canvas = canvas;
     this.c = constants || {};
     this.p = {
+      on: true,
       pos: [0, 0],
       size: [canvas.width, canvas.height],
     };

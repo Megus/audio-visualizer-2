@@ -19,14 +19,19 @@ class LayerSystem {
       if (l.p !== undefined) {
         layer.p = { ...layer.p, ...l.p };
       }
+
+      let boundUpdate = null;
       if (l.update !== undefined) {
-        const boundUpdate = l.update.bind(layer);
-        const renderFrame = layer.renderFrame.bind(layer);
-        layer.renderFrame = (timestamp, dTimestamp) => {
-          boundUpdate(timestamp, dTimestamp);
-          renderFrame(timestamp, dTimestamp);
-        }
+        boundUpdate = l.update.bind(layer);
       }
+      const boundRenderFrame = layer.renderFrame.bind(layer);
+
+      layer.renderFrame = function(timestamp, dTimestamp) {
+        if (boundUpdate !== null) boundUpdate(timestamp, dTimestamp);
+        if (this.p.on === true) {
+          boundRenderFrame(timestamp, dTimestamp);
+        }
+      }.bind(layer);
 
       // TODO: Setup timeline
 

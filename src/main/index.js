@@ -7,6 +7,8 @@ if (module.hot) {
   module.hot.accept();
 }
 
+const openDevTools = true;
+
 // global reference to mainWindow (necessary to prevent window from being garbage collected)
 let mainWindow;
 let videoRenderer;
@@ -18,7 +20,7 @@ function createMainWindow() {
   }
 
   const window = new BrowserWindow({
-    width: config.width / 2,
+    width: config.width / 2 + (openDevTools ? 560 : 0),
     height: config.height / 2,
     webPreferences: {
       nodeIntegration: true
@@ -30,6 +32,8 @@ function createMainWindow() {
   window.on("closed", () => {
     mainWindow = null;
   });
+
+  if (openDevTools) window.webContents.openDevTools();
 
   return window;
 }
