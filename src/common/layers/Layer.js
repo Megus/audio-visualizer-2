@@ -10,7 +10,7 @@ class Layer {
     this.children = [];
   }
 
-  async setup() {};
+  async setup(folderPath) {};
 
   addChild(child) {
     this.children.push(child);

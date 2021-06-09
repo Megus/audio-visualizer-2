@@ -14,7 +14,7 @@ const project = new config.projectClass(config, mainCanvas);
 
 // Create audio
 const audio = document.createElement("audio");
-audio.src = project.audioPath;
+audio.src = project.audioUrl;
 audio.loop = true;
 
 if (config.muteAudio) {

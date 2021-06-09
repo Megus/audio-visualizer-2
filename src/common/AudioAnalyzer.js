@@ -1,5 +1,7 @@
-import { FFTR } from "kissfft-js";
 import * as fs from "fs";
+import { FFTR } from "kissfft-js";
+
+import * as utils from "../common/utils";
 
 class AudioAnalyzer {
 	constructor(audioPath, fftSize = 8192) {
@@ -11,7 +13,7 @@ class AudioAnalyzer {
 	}
 
   async loadAudio() {
-    const fileData = this.toArrayBuffer(fs.readFileSync(this.audioPath));
+    const fileData = utils.toArrayBuffer(fs.readFileSync(this.audioPath));
 
     // Decode mp3 to PCM ArrayBuffer
     const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
@@ -25,15 +27,6 @@ class AudioAnalyzer {
 		for (let c = 0; c < audioBuffer.numberOfChannels; c += 1) {
 			this.channels.push(audioBuffer.getChannelData(c));
 		}
-  }
-
-  toArrayBuffer(buf) {
-    var ab = new ArrayBuffer(buf.length);
-    var view = new Uint8Array(ab);
-    for (var i = 0; i < buf.length; ++i) {
-        view[i] = buf[i];
-    }
-    return ab;
   }
 
 	/**

@@ -1,8 +1,9 @@
 import Timeline from "./Timeline";
 
 class LayerSystem {
-  constructor(canvas) {
+  constructor(canvas, folderPath) {
     this.canvas = canvas;
+    this.folderPath = folderPath;
     this.layers = [];
   }
 
@@ -39,7 +40,7 @@ class LayerSystem {
         layer.children = await this.buildLayersArray(l.children);
       }
 
-      await layer.setup();
+      await layer.setup(this.folderPath);
       layers.push(layer);
     }
     return layers;

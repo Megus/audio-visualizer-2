@@ -1,7 +1,7 @@
-import Project1 from "../projects/project1";
+import PGoodNight from "../projects/24h/6_good_night";
 
 export default {
-  projectClass: Project1,
+  projectClass: PGoodNight,
   width: 1920,
   height: 1080,
   muteAudio: true,
