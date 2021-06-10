@@ -7,7 +7,6 @@ class ImageLayer extends Layer {
   constructor(canvas, constants) {
     super(canvas, constants);
     this.c = { ...this.c, fit: "aspectFit" };
-
   }
 
   async setup(folderPath) {

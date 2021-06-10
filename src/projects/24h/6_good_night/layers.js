@@ -5,13 +5,15 @@ const layers = [
     layer: L.GroupLayer,
     children: [
       {
-        layer: L.ImageLayer,
+        layer: L.AnimationLayer,
         c: {
-          image: "jake/frame_00_delay-0.08s.png",
+          pattern: "jake/frame_%%_delay-0.08s.png",
+          range: [0, 17]
         },
         p: {
           pos: [0, 0],
           size: [1000, 800],
+          fps: 30,
         },
       },
     ]

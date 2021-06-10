@@ -56,6 +56,7 @@ function scaleImageInFrame(fit, imgW, imgH, frameW, frameH) {
 		w = frameW;
 		h = frameH;
 	}
+	// TODO: Add more modes: fillWidth, fillHeight...
 
 	x = Math.floor(x);
 	y = Math.floor(y);
