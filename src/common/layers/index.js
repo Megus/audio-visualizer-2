@@ -4,6 +4,7 @@ import GroupLayer from "./GroupLayer";
 import ImageLayer from "./ImageLayer";
 import Layer from "./Layer";
 import RectLayer from "./RectLayer";
+import ShadertoyLayer from "./ShadertoyLayer";
 
 export {
   AnimationLayer,
@@ -12,4 +13,5 @@ export {
   ImageLayer,
   Layer,
   RectLayer,
+  ShadertoyLayer,
 };
