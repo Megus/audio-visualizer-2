@@ -40,14 +40,14 @@ class AnimationLayer extends Layer {
 
     const cW = this.p.size[0];
     const cH = this.p.size[1];
-		const imgW = image.width;
-		const imgH = image.height;
+    const imgW = image.width;
+    const imgH = image.height;
 
     const ctx = this.canvas.getContext("2d");
     ctx.clearRect(0, 0, cW, cH);
 
-		const {x, y, w, h, sx, sy, sw, sh} = utils.scaleImageInFrame(this.c.fit, imgW, imgH, cW, cH);
-		ctx.drawImage(image, sx, sy, sw, sh, x, y, w, h);
+    const {x, y, w, h, sx, sy, sw, sh} = utils.scaleImageInFrame(this.c.fit, imgW, imgH, cW, cH);
+    ctx.drawImage(image, sx, sy, sw, sh, x, y, w, h);
 
     this.p.frame += dTimestamp * this.p.fps;
   }

@@ -12,69 +12,69 @@ class FilterLayer extends Layer {
   }
 
   async setup(folderPath) {
-		// Get WebGL context
-		const gl = this.canvas.getContext("webgl");
+    // Get WebGL context
+    const gl = this.canvas.getContext("webgl");
     this.gl = gl;
     gl.viewportWidth = this.canvas.width;
     gl.viewportHeight = this.canvas.height;
 
-		// Load shaders
+    // Load shaders
     const shaderText = fs.readFileSync(`${folderPath}/${this.c.shader}`, "utf-8");
-		const fragmentShader = utils.compileFragmentShader(gl, shaderText);
+    const fragmentShader = utils.compileFragmentShader(gl, shaderText);
 
     const vertexShaderText = fs.readFileSync(`${__dirname}/shaders/simple_vertex.glsl`, "utf-8");
-		const vertexShader = utils.compileVertexShader(gl, vertexShaderText);
-		const shaderProgram = gl.createProgram();
-		gl.attachShader(shaderProgram, vertexShader);
-		gl.attachShader(shaderProgram, fragmentShader);
-		gl.linkProgram(shaderProgram);
+    const vertexShader = utils.compileVertexShader(gl, vertexShaderText);
+    const shaderProgram = gl.createProgram();
+    gl.attachShader(shaderProgram, vertexShader);
+    gl.attachShader(shaderProgram, fragmentShader);
+    gl.linkProgram(shaderProgram);
 
-		if (!gl.getProgramParameter(shaderProgram, gl.LINK_STATUS)) {
-			console.log("Could not initialise shaders");
-			console.log(gl.getProgramInfoLog(shaderProgram));
-		}
-		gl.useProgram(shaderProgram);
-		this.shaderProgram = shaderProgram;
+    if (!gl.getProgramParameter(shaderProgram, gl.LINK_STATUS)) {
+      console.log("Could not initialise shaders");
+      console.log(gl.getProgramInfoLog(shaderProgram));
+    }
+    gl.useProgram(shaderProgram);
+    this.shaderProgram = shaderProgram;
 
-		// Create texture from canvas
-		const texture = gl.createTexture();
-		gl.pixelStorei(gl.UNPACK_FLIP_Y_WEBGL, true);
-		gl.bindTexture(gl.TEXTURE_2D, texture);
-		gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
-		gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
-		gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.NEAREST);
-		gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.NEAREST);
-		gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, this.filterCanvas);
-		gl.bindTexture(gl.TEXTURE_2D, null);
-		this.texture = texture;
+    // Create texture from canvas
+    const texture = gl.createTexture();
+    gl.pixelStorei(gl.UNPACK_FLIP_Y_WEBGL, true);
+    gl.bindTexture(gl.TEXTURE_2D, texture);
+    gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
+    gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
+    gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.NEAREST);
+    gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.NEAREST);
+    gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, this.filterCanvas);
+    gl.bindTexture(gl.TEXTURE_2D, null);
+    this.texture = texture;
 
-		// 2 triangles to fill the whole canvas
-		const vertexBuffer = gl.createBuffer();
-		gl.bindBuffer(gl.ARRAY_BUFFER, vertexBuffer);
-		gl.bufferData(gl.ARRAY_BUFFER,
-			new Float32Array([
-			  -1.0, -1.0,
-			   1.0, -1.0,
-			  -1.0,  1.0,
-			  -1.0,  1.0,
-			   1.0, -1.0,
-			   1.0,  1.0]),
-			gl.STATIC_DRAW
-		);
-		this.vertexBuffer = vertexBuffer;
+    // 2 triangles to fill the whole canvas
+    const vertexBuffer = gl.createBuffer();
+    gl.bindBuffer(gl.ARRAY_BUFFER, vertexBuffer);
+    gl.bufferData(gl.ARRAY_BUFFER,
+      new Float32Array([
+        -1.0, -1.0,
+         1.0, -1.0,
+        -1.0,  1.0,
+        -1.0,  1.0,
+         1.0, -1.0,
+         1.0,  1.0]),
+      gl.STATIC_DRAW
+    );
+    this.vertexBuffer = vertexBuffer;
 
-		// Create texture map
-		const textureBuffer = gl.createBuffer();
-		gl.bindBuffer(gl.ARRAY_BUFFER, textureBuffer);
-		gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([
-			0.0, 0.0,
-			1.0, 0.0,
-			0.0, 1.0,
-			0.0, 1.0,
-			1.0, 0.0,
-			1.0, 1.0]),
-		gl.STATIC_DRAW);
-		this.textureBuffer = textureBuffer;
+    // Create texture map
+    const textureBuffer = gl.createBuffer();
+    gl.bindBuffer(gl.ARRAY_BUFFER, textureBuffer);
+    gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([
+      0.0, 0.0,
+      1.0, 0.0,
+      0.0, 1.0,
+      0.0, 1.0,
+      1.0, 0.0,
+      1.0, 1.0]),
+    gl.STATIC_DRAW);
+    this.textureBuffer = textureBuffer;
 
   }
 
@@ -89,31 +89,30 @@ class FilterLayer extends Layer {
 
     const gl = this.gl;
 
-		// Clear the viewport
-		gl.viewport(0, 0, gl.viewportWidth, gl.viewportHeight);
-		gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
+    // Clear the viewport
+    gl.viewport(0, 0, gl.viewportWidth, gl.viewportHeight);
+    gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
 
-		// Update the texture
-		gl.activeTexture(gl.TEXTURE0);
-		gl.bindTexture(gl.TEXTURE_2D, this.texture);
-		gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, this.filterCanvas);
+    // Update the texture
+    gl.activeTexture(gl.TEXTURE0);
+    gl.bindTexture(gl.TEXTURE_2D, this.texture);
+    gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, this.filterCanvas);
 
-		// Set uniforms and attributes
+    // Set uniforms and attributes
     this.c.updateParameters(gl, this.shaderProgram, this.p);
 
-		const texLocation = gl.getAttribLocation(this.shaderProgram, "aTextureCoord");
-		gl.enableVertexAttribArray(texLocation);
-		gl.bindBuffer(gl.ARRAY_BUFFER, this.textureBuffer);
-		gl.vertexAttribPointer(texLocation, 2, gl.FLOAT, false, 0, 0);
+    const texLocation = gl.getAttribLocation(this.shaderProgram, "aTextureCoord");
+    gl.enableVertexAttribArray(texLocation);
+    gl.bindBuffer(gl.ARRAY_BUFFER, this.textureBuffer);
+    gl.vertexAttribPointer(texLocation, 2, gl.FLOAT, false, 0, 0);
 
-		const positionLocation = gl.getAttribLocation(this.shaderProgram, "aVertexPosition");
-		gl.enableVertexAttribArray(positionLocation);
-		gl.bindBuffer(gl.ARRAY_BUFFER, this.vertexBuffer);
-		gl.vertexAttribPointer(positionLocation, 2, gl.FLOAT, false, 0, 0);
+    const positionLocation = gl.getAttribLocation(this.shaderProgram, "aVertexPosition");
+    gl.enableVertexAttribArray(positionLocation);
+    gl.bindBuffer(gl.ARRAY_BUFFER, this.vertexBuffer);
+    gl.vertexAttribPointer(positionLocation, 2, gl.FLOAT, false, 0, 0);
 
-		// Render!
-		gl.drawArrays(gl.TRIANGLES, 0, 6);
-
+    // Render!
+    gl.drawArrays(gl.TRIANGLES, 0, 6);
   }
 }
 

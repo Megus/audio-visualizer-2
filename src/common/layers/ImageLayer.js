@@ -18,14 +18,14 @@ class ImageLayer extends Layer {
   renderFrame(timestamp, dTimestamp) {
     const cW = this.p.size[0];
     const cH = this.p.size[1];
-		const imgW = this.image.width;
-		const imgH = this.image.height;
+    const imgW = this.image.width;
+    const imgH = this.image.height;
 
     const ctx = this.canvas.getContext("2d");
     ctx.clearRect(0, 0, cW, cH);
 
-		const {x, y, w, h, sx, sy, sw, sh} = utils.scaleImageInFrame(this.c.fit, imgW, imgH, cW, cH);
-		ctx.drawImage(this.image, sx, sy, sw, sh, x, y, w, h);
+    const {x, y, w, h, sx, sy, sw, sh} = utils.scaleImageInFrame(this.c.fit, imgW, imgH, cW, cH);
+    ctx.drawImage(this.image, sx, sy, sw, sh, x, y, w, h);
   }
 }
 
