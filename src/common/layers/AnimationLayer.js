@@ -4,8 +4,8 @@ import * as utils from "../utils";
 import Layer from "./Layer";
 
 class AnimationLayer extends Layer {
-  constructor(canvas, constants) {
-    super(canvas, constants);
+  constructor(canvas, c, p) {
+    super(canvas, c, p);
     this.c = { ...this.c, fit: "aspectFit" };
     this.p = { ...this.p, frame: 0, fps: 30 };
     this.frames = [];

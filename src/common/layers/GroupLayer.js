@@ -1,8 +1,8 @@
 import Layer from "./Layer";
 
 class GroupLayer extends Layer {
-  constructor(canvas, constants) {
-    super(canvas, constants);
+  constructor(canvas, c, p) {
+    super(canvas, c, p);
   }
 
   renderFrame(timestamp, dTimestamp) {

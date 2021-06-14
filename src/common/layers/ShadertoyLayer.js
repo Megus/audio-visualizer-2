@@ -6,8 +6,8 @@ import * as utils from "../utils";
 import Layer from "./Layer";
 
 class ShadertoyLayer extends Layer {
-  constructor(canvas, constants) {
-    super(canvas, constants);
+  constructor(canvas, c, p) {
+    super(canvas, c, p);
   }
 
   async setup(folderPath) {

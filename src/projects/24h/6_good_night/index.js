@@ -1,9 +1,8 @@
 import Project from "../../../common/Project";
 import LayerSystem from "../../../common/LayerSystem";
+import ScriptSystem from "../../../common/ScriptSystem";
 
 import layers from "./layers";
-
-const fftSize = 2048;
 
 class PGoodNight extends Project {
   constructor(config, canvas) {
@@ -14,10 +13,29 @@ class PGoodNight extends Project {
 
   async setup() {
     this.layerSystem = new LayerSystem(this.canvas, __dirname);
-    this.layerSystem.buildLayers(layers);
+    await this.layerSystem.buildLayers(layers);
+
+    this.scriptSystem = new ScriptSystem();
+    this.scriptSystem.addScript(this.mainScript.bind(this));
   }
 
+  /**
+   *
+   * @param {ScriptSystem} s
+   */
+  * mainScript(s) {
+    const l = this.layerSystem.layersMap;
+
+    l.jake.p.fps = 5;
+    l.filter.p.pos = [100, 100];
+    yield* s.wait(1);
+    s.animate(l.filter.p, "pos", s.easing.easeOutElastic, 3, [500, 200]);
+    s.animate(l.jake.p, "fps", s.easing.linear, 7, 60);
+  }
+
+
   renderFrame(timestamp, dTimestamp) {
+    this.scriptSystem.update(timestamp, dTimestamp);
     const ctx = this.canvas.getContext("2d");
     ctx.fillStyle = "#000";
     ctx.fillRect(0, 0, this.canvas.width, this.canvas.height);

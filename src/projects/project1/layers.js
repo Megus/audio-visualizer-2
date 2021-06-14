@@ -14,11 +14,6 @@ const layers = [
           pos: [0, 0],
           size: [100, 200],
         },
-        timeline: {
-          pos: [
-
-          ],
-        }
       },
       {
         layer: L.RectLayer,

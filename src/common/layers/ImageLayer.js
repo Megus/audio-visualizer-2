@@ -4,8 +4,8 @@ import * as utils from "../utils";
 import Layer from "./Layer";
 
 class ImageLayer extends Layer {
-  constructor(canvas, constants) {
-    super(canvas, constants);
+  constructor(canvas, c, p) {
+    super(canvas, c, p);
     this.c = { ...this.c, fit: "aspectFit" };
   }
 

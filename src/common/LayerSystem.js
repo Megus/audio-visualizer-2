@@ -1,10 +1,9 @@
-import Timeline from "./Timeline";
-
 class LayerSystem {
   constructor(canvas, folderPath) {
     this.canvas = canvas;
     this.folderPath = folderPath;
     this.layers = [];
+    this.layersMap = {};
   }
 
   async buildLayers(layersInfo) {
@@ -16,9 +15,9 @@ class LayerSystem {
     for (let i = 0; i < layersInfo.length; i++) {
       const l = layersInfo[i];
       const layerCanvas = new OffscreenCanvas(this.canvas.width, this.canvas.height);
-      const layer = new l.layer(layerCanvas, l.c || {});
-      if (l.p !== undefined) {
-        layer.p = { ...layer.p, ...l.p };
+      const layer = new l.layer(layerCanvas, l.c, l.p);
+      if (l.id !== undefined) {
+        this.layersMap[l.id] = layer;
       }
 
       let boundUpdate = null;
@@ -34,8 +33,6 @@ class LayerSystem {
         }
       }.bind(layer);
 
-      // TODO: Setup timeline
-
       if (l.children != null) {
         layer.children = await this.buildLayersArray(l.children);
       }
@@ -44,14 +41,6 @@ class LayerSystem {
       layers.push(layer);
     }
     return layers;
-  }
-
-  addLayer(layer) {
-    this.layers.push(layer);
-  }
-
-  removeLayer(layer) {
-    // TODO
   }
 
   renderFrame(timestamp, dTimestamp) {

@@ -5,8 +5,8 @@ import * as utils from "../utils";
 import Layer from "./Layer";
 
 class FilterLayer extends Layer {
-  constructor(canvas, constants) {
-    super(canvas, constants);
+  constructor(canvas, c, p) {
+    super(canvas, c, p);
 
     this.filterCanvas = new OffscreenCanvas(this.canvas.width, this.canvas.height);
   }

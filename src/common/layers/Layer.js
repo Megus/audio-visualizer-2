@@ -1,24 +1,11 @@
 class Layer {
-  constructor(canvas, constants) {
+  constructor(canvas, c, p) {
     this.canvas = canvas;
-    this.c = constants || {};
-    this.p = {
-      on: true,
-      pos: [0, 0],
-      size: [canvas.width, canvas.height],
-    };
-    this.children = [];
+    this.c = c || {};
+    this.p = { on: true, pos: [0, 0], size: [canvas.width, canvas.height], ...(p || {}) };
   }
 
   async setup(folderPath) {};
-
-  addChild(child) {
-    this.children.push(child);
-  }
-
-  removeChild(child) {
-    // TODO
-  }
 
   renderFrame(timestamp, dTimestamp) {};
 }

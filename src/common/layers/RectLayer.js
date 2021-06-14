@@ -1,8 +1,8 @@
 import Layer from "./Layer";
 
 class RectLayer extends Layer {
-  constructor(canvas, constants) {
-    super(canvas, constants);
+  constructor(canvas, c, p) {
+    super(canvas, c, p);
 
     this.p = { ...this.p, color: [255, 255, 255, 255] };
   }
