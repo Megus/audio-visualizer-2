@@ -3,6 +3,7 @@ import FilterLayer from "./FilterLayer";
 import GroupLayer from "./GroupLayer";
 import ImageLayer from "./ImageLayer";
 import Layer from "./Layer";
+import MetaBalls from "./MetaBalls";
 import RectLayer from "./RectLayer";
 import ShadertoyLayer from "./ShadertoyLayer";
 
@@ -12,6 +13,7 @@ export {
   GroupLayer,
   ImageLayer,
   Layer,
+  MetaBalls,
   RectLayer,
   ShadertoyLayer,
 };

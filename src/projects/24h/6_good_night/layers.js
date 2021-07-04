@@ -1,14 +1,33 @@
 import * as L from "../../../common/layers";
+import MegusLogo from "../MegusLogo";
+import TrackTitle from "../TrackTitle";
 
 const layers = [
-  /*{
-    layer: L.ShadertoyLayer,
-    id: "shadertoy",
-    c: {
-      shader: "primitives.glsl",
-    },
-  },*/
   {
+    layer: L.MetaBalls,
+    id: "metaballs",
+    c: {
+      ballsCount: 12*6,
+    },
+    p: {
+      blockSize: 15,
+      ballScale: 0.015,
+    }
+  },
+  {
+    layer: MegusLogo,
+    id: "megus",
+  },
+  {
+    layer: TrackTitle,
+    c: {
+      title: "Good Night",
+    },
+    p: {
+      pos: [0, 900],
+    }
+  }
+  /*{
     layer: L.FilterLayer,
     id: "filter",
     c: {
@@ -33,7 +52,7 @@ const layers = [
         },
       },
     ]
-  },
+  },*/
 ];
 
 export default layers;

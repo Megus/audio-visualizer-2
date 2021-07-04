@@ -15,7 +15,7 @@ class Project1 extends Project {
   }
 
   async setup() {
-    this.audioAnalyzer = new AudioAnalyzer(`${__static}/${this.audioPath}`, fftSize);
+    this.audioAnalyzer = new AudioAnalyzer(`${__static}/${this.audioPath}`);
     await this.audioAnalyzer.loadAudio();
 
     // Layer system init

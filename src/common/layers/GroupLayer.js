@@ -11,6 +11,7 @@ class GroupLayer extends Layer {
 
     this.children.forEach((layer) => {
       layer.renderFrame(timestamp, dTimestamp);
+      ctx.globalAlpha = layer.p.alpha;
       ctx.drawImage(layer.canvas, 0, 0, layer.p.size[0], layer.p.size[1], layer.p.pos[0], layer.p.pos[1], layer.p.size[0], layer.p.size[1]);
     });
   }

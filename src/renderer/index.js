@@ -42,7 +42,7 @@ function animate(timestampMs) {
   oldTimestamp = timestamp;
 
   if (config.renderVideo) {
-    const png = mainCanvas.toDataURL();
+    const png = mainCanvas.toDataURL("image/jpeg", 1);
     ipcRenderer.sendSync("frame-msg", png);
   }
 

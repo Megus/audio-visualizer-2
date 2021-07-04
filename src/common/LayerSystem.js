@@ -1,13 +1,17 @@
+import GroupLayer from "./layers/GroupLayer";
+
 class LayerSystem {
   constructor(canvas, folderPath) {
     this.canvas = canvas;
     this.folderPath = folderPath;
     this.layers = [];
     this.layersMap = {};
+    this.groupLayer = new GroupLayer(this.canvas);
   }
 
   async buildLayers(layersInfo) {
     this.layers = await this.buildLayersArray(layersInfo);
+    this.groupLayer.children = this.layers;
   }
 
   async buildLayersArray(layersInfo) {
@@ -44,13 +48,7 @@ class LayerSystem {
   }
 
   renderFrame(timestamp, dTimestamp) {
-    const ctx = this.canvas.getContext("2d");
-    //ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
-
-    this.layers.forEach((layer) => {
-      layer.renderFrame(timestamp, dTimestamp);
-      ctx.drawImage(layer.canvas, 0, 0, layer.p.size[0], layer.p.size[1], layer.p.pos[0], layer.p.pos[1], layer.p.size[0], layer.p.size[1]);
-    });
+    this.groupLayer.renderFrame(timestamp, dTimestamp);
   }
 }
 

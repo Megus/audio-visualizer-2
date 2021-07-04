@@ -21,7 +21,7 @@ function createMainWindow() {
 
   const window = new BrowserWindow({
     width: config.width / 2 + (openDevTools ? 560 : 0),
-    height: config.height / 2,
+    height: config.height / 2 + 30,
     webPreferences: {
       nodeIntegration: true
     }

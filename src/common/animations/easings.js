@@ -113,7 +113,7 @@ const easings = {
 		return 0.5 * (scaledTime2 * scaledTime2 * ((s + 1) * scaledTime2 + s) + 2);
 	},
 	// Bounces slowly then quickly to finish
-	easeInElastic: (t, magnitude = 0.7) => {
+	easeInElastic: (t, magnitude = 0.2) => {
 		if (t === 0 || t === 1) {
 			return t;
 		}
@@ -124,7 +124,7 @@ const easings = {
 		return -(Math.pow(2, 10 * scaledTime1) * Math.sin((scaledTime1 - s) * (2 * Math.PI) / p));
 	},
 	// Fast acceleration, bounces to zero
-	easeOutElastic: (t, magnitude = 0.7) => {
+	easeOutElastic: (t, magnitude = 0.2) => {
 		const p = 1 - magnitude;
 		const scaledTime = t * 2;
 		if (t === 0 || t === 1) {

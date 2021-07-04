@@ -27,7 +27,17 @@ class AudioAnalyzer {
     for (let c = 0; c < audioBuffer.numberOfChannels; c += 1) {
       this.channels.push(audioBuffer.getChannelData(c));
     }
+
+    // Create pitch table
+    const pitchTable = this.create12TETPitchTable(440);
+    this.binTable = [];
+    for (let i = 0; i < pitchTable.length; i++) {
+      const bin = this.freqToFFTBin(pitchTable[i]);
+      this.binTable.push(bin);
+    }
   }
+
+
 
   /**
    * Get frequency powers at the specific time to pre-allocated data array.
@@ -50,6 +60,16 @@ class AudioAnalyzer {
       dataArray[c] = Math.sqrt((out[c * 2] * out[c * 2]) +
         (out[(c * 2) + 1] * out[(c * 2) + 1])) / this.fftSize;
     }
+  }
+
+  getPitchArray(timestamp) {
+    const frequencies = new Float32Array(this.fftSize);
+    this.getFrequencyArray(timestamp, frequencies);
+    const pitches = [];
+    for (let i = 0; i < this.binTable.length; i++) {
+      pitches.push(frequencies[this.binTable[i]]);
+    }
+    return pitches;
   }
 
   /**
@@ -118,6 +138,36 @@ class AudioAnalyzer {
       value += this.channels[c][sample];
     }
     return value / this.channels.length;
+  }
+
+  create12TETPitchTable(A4Freq) {
+    let table = [];
+    for (let c = 0; c < 9 * 12; c++) {
+      table.push(0);
+    }
+
+    table[4 * 12 + 9] = A4Freq;
+    let i = 4 * 12 + 10;
+    while (i < 9 * 12) {
+      if (i % 12 == 9) {
+        table[i] = table[i - 12] * 2;
+      } else {
+        table[i] = table[i - 1] * Math.pow(2, 1 / 12);
+      }
+      i++;
+    }
+
+    i = 4 * 12 + 8;
+    while (i >= 0) {
+      if (i % 12 == 2) {
+        table[i] = table[i + 12] / 2;
+      } else {
+        table[i] = table[i + 1] / Math.pow(2, 1 / 12);
+      }
+      i--;
+    }
+
+    return table;
   }
 }
 

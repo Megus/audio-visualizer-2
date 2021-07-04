@@ -11,7 +11,12 @@ class VideoRenderer {
   start() {
     this.encoder = spawn(
       "ffmpeg",
-      ["-y", "-f", "image2pipe", "-r", `${this.config.fps}`, "-i", "-", "-vcodec", "mpeg4", "-r", `${this.config.fps}`, "video.mp4"],
+      [
+        "-y", "-f", "image2pipe", "-r", `${this.config.fps}`, "-i", "-",
+        //"-c:v", "libx264", "-preset", "veryslow", "-crf", "17", "-tune", "animation", "-r", `${this.config.fps}`,
+        "-c:v", "mpeg4", "-b:v", "12000k", "-r", `${this.config.fps}`,
+        "video.mp4"
+      ],
       {stdio: ['pipe', process.stdout, process.stderr]}
     );
 
@@ -22,7 +27,7 @@ class VideoRenderer {
 
     ipcMain.on("frame-msg", (event, dataURL) => {
       if (this.frameNumber < this.framesTotal) {
-        const base64Data = dataURL.replace(/^data:image\/png;base64,/, "");
+        const base64Data = dataURL.replace(/^data:image\/jpeg;base64,/, "");
         const buffer = Buffer.from(base64Data, "base64");
         this.encoder.stdin.write(buffer);
 

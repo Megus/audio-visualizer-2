@@ -4,7 +4,7 @@ class RectLayer extends Layer {
   constructor(canvas, c, p) {
     super(canvas, c, p);
 
-    this.p = { ...this.p, color: [255, 255, 255, 255] };
+    this.p = { color: [255, 255, 255, 1], ...this.p };
   }
 
   renderFrame(timestamp, dTimestamp) {
