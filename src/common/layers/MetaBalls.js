@@ -1,3 +1,6 @@
+import * as fs from "fs";
+
+import * as utils from "../utils";
 import Layer from "./Layer";
 
 class MetaBalls extends Layer {
@@ -16,41 +19,93 @@ class MetaBalls extends Layer {
       this.balls.push([Math.random(), Math.random(), Math.random() - 0.5, Math.random() - 0.5]);
       this.p.ballSizes.push(0);
     }
+
+    // WebGL setup
+    const gl = this.canvas.getContext("webgl2");
+    this.gl = gl;
+    gl.viewportWidth = this.canvas.width;
+    gl.viewportHeight = this.canvas.height;
+
+    // Load shaders
+    const shaderText = fs.readFileSync(`${__dirname}/shaders/metaballs.glsl`, "utf-8");
+    const fragmentShader = utils.compileFragmentShader(gl, shaderText);
+    const vertexShaderText = fs.readFileSync(`${__dirname}/shaders/simple_vertex.glsl`, "utf-8");
+    const vertexShader = utils.compileVertexShader(gl, vertexShaderText);
+
+    const shaderProgram = gl.createProgram();
+    gl.attachShader(shaderProgram, vertexShader);
+    gl.attachShader(shaderProgram, fragmentShader);
+    gl.linkProgram(shaderProgram);
+
+    gl.getProgramParameter(shaderProgram, gl.LINK_STATUS);
+    gl.useProgram(shaderProgram);
+    this.shaderProgram = shaderProgram;
+
+    // 2 triangles to fill the whole canvas
+    const vertexBuffer = gl.createBuffer();
+    gl.bindBuffer(gl.ARRAY_BUFFER, vertexBuffer);
+    gl.bufferData(gl.ARRAY_BUFFER,
+      new Float32Array([
+        -1.0, -1.0,
+         1.0, -1.0,
+        -1.0,  1.0,
+        -1.0,  1.0,
+         1.0, -1.0,
+         1.0,  1.0]),
+      gl.STATIC_DRAW
+    );
+    this.vertexBuffer = vertexBuffer;
+
+    // Create texture map
+    const textureBuffer = gl.createBuffer();
+    gl.bindBuffer(gl.ARRAY_BUFFER, textureBuffer);
+    gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([
+      0.0, 0.0,
+      1.0, 0.0,
+      0.0, 1.0,
+      0.0, 1.0,
+      1.0, 0.0,
+      1.0, 1.0]),
+    gl.STATIC_DRAW);
+    this.textureBuffer = textureBuffer;
   }
 
   renderFrame(timestamp, dTimestamp) {
-    const cW = this.p.size[0];
-    const cH = this.p.size[1];
-    const scale = 1.1 * Math.max(cW, cH);
+    const gl = this.gl;
+    // Clear the viewport
+    gl.viewport(0, 0, gl.viewportWidth, gl.viewportHeight);
+    gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
 
-    const ctx = this.canvas.getContext("2d");
-    ctx.clearRect(0, 0, cW, cH);
-
-    let x = 0;
-    let y = 0;
-
-    // Draw meta balls
-    while (y < cH) {
-      while (x < cW) {
-        let power = 0;
-        const nx = x / scale;
-        const ny = y / scale;
-        for (let i = 0; i < this.balls.length; i++) {
-          const b = this.balls[i];
-          let d = (b[0] - nx) * (b[0] - nx) + (b[1] - ny) * (b[1] - ny);
-          power += this.p.ballSizes[i] * this.p.ballScale / Math.sqrt(d);
-        }
-
-        power = Math.min(power, 1);
-
-        ctx.fillStyle = `rgba(${this.p.color[0]},${this.p.color[1]},${this.p.color[2]},${power})`;
-        ctx.fillRect(x, y, this.p.blockSize, this.p.blockSize);
-
-        x += this.p.blockSize;
-      }
-      x = 0;
-      y += this.p.blockSize;
+    // Set uniforms and attributes
+    let mLocation = gl.getUniformLocation(this.shaderProgram, "ballScale");
+    gl.uniform1f(mLocation, this.p.ballScale);
+    mLocation = gl.getUniformLocation(this.shaderProgram, "aspect");
+    gl.uniform1f(mLocation, this.p.size[0] / this.p.size[1]);
+    mLocation = gl.getUniformLocation(this.shaderProgram, "ballColor");
+    gl.uniform4f(mLocation, this.p.color[0] / 255, this.p.color[1] / 255, this.p.color[2] / 255, 1);
+    mLocation = gl.getUniformLocation(this.shaderProgram, "balls");
+    const b = [];
+    for (let i = 0; i < this.balls.length; i++) {
+      b.push(this.balls[i][0], this.balls[i][1], this.p.ballSizes[i])
     }
+    for (let i = this.balls.length; i < 100; i++) {
+      b.push(2, 2, 0);
+    }
+    gl.uniform1fv(mLocation, b);
+
+    const texLocation = gl.getAttribLocation(this.shaderProgram, "aTextureCoord");
+    gl.enableVertexAttribArray(texLocation);
+    gl.bindBuffer(gl.ARRAY_BUFFER, this.textureBuffer);
+    gl.vertexAttribPointer(texLocation, 2, gl.FLOAT, false, 0, 0);
+
+    const positionLocation = gl.getAttribLocation(this.shaderProgram, "aVertexPosition");
+    gl.enableVertexAttribArray(positionLocation);
+    gl.bindBuffer(gl.ARRAY_BUFFER, this.vertexBuffer);
+    gl.vertexAttribPointer(positionLocation, 2, gl.FLOAT, false, 0, 0);
+
+    // Render!
+    gl.drawArrays(gl.TRIANGLES, 0, 6);
+
 
     // Move balls
     for (let i = 0; i < this.balls.length; i++) {
@@ -62,13 +117,6 @@ class MetaBalls extends Layer {
       if (b[0] < 0 || b[0] > 1) b[2] *= -(Math.random() * 0.2 + 0.9);
       if (b[1] < 0 || b[1] > 1) b[3] *= -(Math.random() * 0.2 + 0.9);
     }
-
-    // Test overlay
-    /*ctx.fillStyle = "rgba(255, 0, 0, 1)"
-    for (let i = 0; i < this.balls.length; i++) {
-      const v = this.p.ballSizes[i] * 100;
-      ctx.fillRect(i * 10, 0, 10, v);
-    }*/
   }
 }
 

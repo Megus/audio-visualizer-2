@@ -82,12 +82,6 @@ class ShadertoyLayer extends Layer {
     mLocation = gl.getUniformLocation(this.shaderProgram, "iMouse");
     this.gl.uniform4f(mLocation, 0, 0, 0, 0);
 
-
-    /*const texLocation = gl.getAttribLocation(this.shaderProgram, "aFragPosition");
-    gl.enableVertexAttribArray(texLocation);
-    gl.bindBuffer(gl.ARRAY_BUFFER, this.textureBuffer);
-    gl.vertexAttribPointer(texLocation, 2, gl.FLOAT, false, 0, 0);*/
-
     const positionLocation = gl.getAttribLocation(this.shaderProgram, "aVertexPosition");
     gl.enableVertexAttribArray(positionLocation);
     gl.bindBuffer(gl.ARRAY_BUFFER, this.vertexBuffer);

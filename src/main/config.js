@@ -4,8 +4,8 @@ export default {
   projectClass: PGoodNight,
   //width: 1920, height: 1080,
   width: 1024, height: 1024,
-  muteAudio: true,
-  renderVideo: true,
+  muteAudio: false,
+  renderVideo: false,
   fps: 60,
-  duration: 5, // in seconds
+  duration: 15, // in seconds
 };

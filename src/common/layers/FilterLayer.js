@@ -29,10 +29,7 @@ class FilterLayer extends Layer {
     gl.attachShader(shaderProgram, fragmentShader);
     gl.linkProgram(shaderProgram);
 
-    if (!gl.getProgramParameter(shaderProgram, gl.LINK_STATUS)) {
-      console.log("Could not initialise shaders");
-      console.log(gl.getProgramInfoLog(shaderProgram));
-    }
+    gl.getProgramParameter(shaderProgram, gl.LINK_STATUS);
     gl.useProgram(shaderProgram);
     this.shaderProgram = shaderProgram;
 
@@ -75,7 +72,6 @@ class FilterLayer extends Layer {
       1.0, 1.0]),
     gl.STATIC_DRAW);
     this.textureBuffer = textureBuffer;
-
   }
 
   renderFrame(timestamp, dTimestamp) {

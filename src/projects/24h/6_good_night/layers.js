@@ -11,7 +11,7 @@ const layers = [
     },
     p: {
       blockSize: 15,
-      ballScale: 0.015,
+      ballScale: 0.01,
     }
   },
   {
