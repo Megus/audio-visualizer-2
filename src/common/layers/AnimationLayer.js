@@ -6,8 +6,8 @@ import Layer from "./Layer";
 class AnimationLayer extends Layer {
   constructor(canvas, c, p) {
     super(canvas, c, p);
-    this.c = { ...this.c, fit: "aspectFit" };
-    this.p = { ...this.p, frame: 0, fps: 30 };
+    this.c = { fit: "aspectFit", ...this.c };
+    this.p = { frame: 0, fps: 30, ...this.p };
     this.frames = [];
   }
 

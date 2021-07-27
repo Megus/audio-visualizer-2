@@ -12,6 +12,8 @@ mainCanvas.style.height = `${config.height / 2}px`;
 // Create project
 const project = new config.projectClass(config, mainCanvas);
 
+ipcRenderer.sendSync("audio-path", project.audioPath);
+
 // Create audio
 const audio = document.createElement("audio");
 audio.src = project.audioUrl;

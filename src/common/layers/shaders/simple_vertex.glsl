@@ -1,6 +1,8 @@
-attribute vec2 aVertexPosition;
-attribute vec2 aTextureCoord;
-varying vec2 vTextureCoord;
+#version 300 es
+
+in vec2 aVertexPosition;
+in vec2 aTextureCoord;
+out vec2 vTextureCoord;
 
 void main(void) {
   vTextureCoord = aTextureCoord;

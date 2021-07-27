@@ -1,5 +1,8 @@
+#version 300 es
+
 precision mediump float;
-varying vec2 vTextureCoord;
+in vec2 vTextureCoord;
+out vec4 fragColor;
 
 #define BALLS_COUNT 100
 
@@ -19,6 +22,6 @@ void main(void) {
   }
   power = clamp(power, 0., 1.);
 
-  //gl_FragColor = vec4(ballColor.x * power, ballColor.y * power, ballColor.z * power, 1.);
-  gl_FragColor = ballColor * power;
+  //fragColor = vec4(ballColor.x * power, ballColor.y * power, ballColor.z * power, 1.);
+  fragColor = ballColor * power;
 }

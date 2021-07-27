@@ -1,4 +1,5 @@
 import { Layer, ImageLayer } from "../../common/layers";
+import ScriptSystem from "../../common/ScriptSystem";
 
 class MegusLogo extends Layer {
   constructor(canvas, c, p) {
@@ -9,9 +10,18 @@ class MegusLogo extends Layer {
 
   async setup(folderPath) {
     await this.imageLayer.setup(__dirname);
+    this.scriptSystem = new ScriptSystem();
+    this.scriptSystem.addScript(this.mainScript.bind(this));
+  }
+
+  * mainScript(s) {
+    yield* s.wait(12);
+    s.animate(this.p, "alpha", s.easing.linear, 2, 0);
   }
 
   renderFrame(timestamp, dTimestamp) {
+    this.scriptSystem.update(timestamp, dTimestamp);
+
     const ctx = this.canvas.getContext("2d");
     ctx.resetTransform();
     ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);

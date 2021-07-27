@@ -6,7 +6,7 @@ import layers from "./layers";
 
 const fftSize = 2048;
 
-class Project1 extends Project {
+export default class extends Project {
   constructor(config, canvas) {
     super(config, canvas);
     const dirs = __dirname.split("/");
@@ -30,5 +30,3 @@ class Project1 extends Project {
     this.layerSystem.renderFrame(timestamp, dTimestamp);
   }
 }
-
-export default Project1;

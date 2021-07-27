@@ -2,7 +2,6 @@ import { timeStamp } from "console";
 import * as fs from "fs";
 
 import * as utils from "../utils";
-
 import Layer from "./Layer";
 
 class ShadertoyLayer extends Layer {

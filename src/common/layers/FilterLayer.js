@@ -1,6 +1,7 @@
 import * as fs from "fs";
 
 import * as utils from "../utils";
+import GroupLayer from "./GroupLayer";
 
 import Layer from "./Layer";
 
@@ -9,11 +10,15 @@ class FilterLayer extends Layer {
     super(canvas, c, p);
 
     this.filterCanvas = new OffscreenCanvas(this.canvas.width, this.canvas.height);
+    this.group = new GroupLayer(this.filterCanvas);
   }
 
   async setup(folderPath) {
+    this.group.children = this.children;
+    this.group.setup(folderPath);
+
     // Get WebGL context
-    const gl = this.canvas.getContext("webgl");
+    const gl = this.canvas.getContext("webgl2");
     this.gl = gl;
     gl.viewportWidth = this.canvas.width;
     gl.viewportHeight = this.canvas.height;
@@ -75,13 +80,7 @@ class FilterLayer extends Layer {
   }
 
   renderFrame(timestamp, dTimestamp) {
-    const ctx = this.filterCanvas.getContext("2d");
-    ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
-
-    this.children.forEach((layer) => {
-      layer.renderFrame(timestamp, dTimestamp);
-      ctx.drawImage(layer.canvas, 0, 0, layer.p.size[0], layer.p.size[1], layer.p.pos[0], layer.p.pos[1], layer.p.size[0], layer.p.size[1]);
-    });
+    this.group.renderFrame(timestamp, dTimestamp);
 
     const gl = this.gl;
 
@@ -95,7 +94,9 @@ class FilterLayer extends Layer {
     gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, this.filterCanvas);
 
     // Set uniforms and attributes
-    this.c.updateParameters(gl, this.shaderProgram, this.p);
+    if (this.c.updateParameters !== undefined) {
+      this.c.updateParameters(gl, this.shaderProgram, this.p);
+    }
 
     const texLocation = gl.getAttribLocation(this.shaderProgram, "aTextureCoord");
     gl.enableVertexAttribArray(texLocation);
@@ -106,6 +107,9 @@ class FilterLayer extends Layer {
     gl.enableVertexAttribArray(positionLocation);
     gl.bindBuffer(gl.ARRAY_BUFFER, this.vertexBuffer);
     gl.vertexAttribPointer(positionLocation, 2, gl.FLOAT, false, 0, 0);
+
+    const mLocation = gl.getUniformLocation(this.shaderProgram, "iResolution");
+    this.gl.uniform2f(mLocation, this.canvas.width, this.canvas.height);
 
     // Render!
     gl.drawArrays(gl.TRIANGLES, 0, 6);

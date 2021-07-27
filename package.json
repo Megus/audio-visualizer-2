@@ -9,7 +9,7 @@
     "three": "^0.125.2"
   },
   "devDependencies": {
-    "electron": "^11.2.3",
+    "electron": "^11.4.10",
     "electron-webpack": "^2.8.2",
     "webpack": "^4.46.0"
   },

@@ -1,18 +1,51 @@
 import * as L from "../../../common/layers";
-import MegusLogo from "../MegusLogo";
-import TrackTitle from "../TrackTitle";
+import MegusLogo from "../../layers/MegusLogo";
+import TrackTitle from "../../layers/TrackTitle";
 
 const layers = [
   {
-    layer: L.MetaBalls,
-    id: "metaballs",
-    c: {
-      ballsCount: 12*6,
-    },
-    p: {
-      blockSize: 15,
-      ballScale: 0.01,
-    }
+    layer: L.RectLayer,
+    p: { color: [14, 25, 29, 1] }
+  },
+  {
+    layer: L.GroupLayer,
+    id: "content",
+    children: [
+      {
+        layer: L.RectLayer,
+        p: { color: [14, 25, 29, 1] }
+      },
+      {
+        layer: L.ImageLayer,
+        id: "l1",
+        c: { image: "layer1.png" },
+        p: { size: [1620, 1080]}
+      },
+      {
+        layer: L.ImageLayer,
+        id: "l2",
+        c: { image: "layer2.png" },
+        p: { size: [1620, 1080]}
+      },
+      {
+        layer: L.ImageLayer,
+        id: "l3",
+        c: { image: "layer3.png" },
+        p: { size: [1620, 1080] }
+      },
+      {
+        layer: L.ImageLayer,
+        id: "l4",
+        c: { image: "layer4.png", fit: "aspectFill" },
+        p: { alpha: 0.15, size: [1600, 1600] }
+      },
+      {
+        layer: L.MetaBalls,
+        id: "metaballs",
+        c: { ballsCount: 12*6 },
+        p: { alpha: 0.8, ballScale: 0.01 }
+      },
+    ]
   },
   {
     layer: MegusLogo,
@@ -20,39 +53,9 @@ const layers = [
   },
   {
     layer: TrackTitle,
-    c: {
-      title: "Good Night",
-    },
-    p: {
-      pos: [0, 900],
-    }
+    c: { title: "Good Night" },
+    p: { pos: [0, 900] }
   }
-  /*{
-    layer: L.FilterLayer,
-    id: "filter",
-    c: {
-      shader: "adjustColor.glsl",
-      updateParameters: (gl, shaderProgram, p) => {
-        const mLocation = gl.getUniformLocation(shaderProgram, "m");
-        gl.uniform1fv(mLocation, [0.1,0.5,0,0,0, 0,0.5,0,0,0, 0,0,1,0,0, 0,0,0,1,0]);
-      },
-    },
-    children: [
-      {
-        layer: L.AnimationLayer,
-        id: "jake",
-        c: {
-          pattern: "jake/frame_%%_delay-0.08s.png",
-          range: [0, 17]
-        },
-        p: {
-          pos: [0, 0],
-          size: [500, 500],
-          fps: 30,
-        },
-      },
-    ]
-  },*/
 ];
 
 export default layers;

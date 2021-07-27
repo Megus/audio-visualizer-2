@@ -6,7 +6,8 @@ import Layer from "./Layer";
 class ImageLayer extends Layer {
   constructor(canvas, c, p) {
     super(canvas, c, p);
-    this.c = { ...this.c, fit: "aspectFit" };
+    this.c = { fit: "aspectFit", ...this.c };
+    this.p = { offset: [0, 0], ...this.p };
   }
 
   async setup(folderPath) {
@@ -25,7 +26,7 @@ class ImageLayer extends Layer {
     ctx.clearRect(0, 0, cW, cH);
 
     const {x, y, w, h, sx, sy, sw, sh} = utils.scaleImageInFrame(this.c.fit, imgW, imgH, cW, cH);
-    ctx.drawImage(this.image, sx, sy, sw, sh, x, y, w, h);
+    ctx.drawImage(this.image, sx, sy, sw, sh, x + this.p.offset[0], y + this.p.offset[1], w, h);
   }
 }
 
