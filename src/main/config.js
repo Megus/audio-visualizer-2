@@ -6,8 +6,8 @@ export default {
   projectClass: ProjectClass,
   width: 1920, height: 1080,
   //width: 1024, height: 1024,
-  muteAudio: false,
-  renderVideo: false,
+  muteAudio: true,
+  renderVideo: true,
   fps: 60,
-  duration: 60, // in seconds
+  duration: 3*60+24, // in seconds
 };

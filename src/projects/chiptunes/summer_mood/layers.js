@@ -25,7 +25,7 @@ export default [
               {
                 layer: SongInLines,
                 id: "sil",
-                c: { shapes: 24 },
+                c: { shapes: 48 },
                 p: { speed: 500 }
               },
             ]

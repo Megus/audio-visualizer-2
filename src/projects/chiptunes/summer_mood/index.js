@@ -56,8 +56,8 @@ export default class extends Project {
     const levels = this.layerSystem.layersMap.sil.p.levels;
     const pitches = this.audioAnalyzer.getPitchArray(timestamp);
     for (let i = 0; i < levels.length; i++) {
-      let v = pitches[i + 24] + pitches[i + 48];
-      v *= 100 * (i + 1) / levels.length;  // Scale factor
+      let v = pitches[i + 36];
+      v *= 150 * (Math.sin((i / levels.length) * (Math.PI / 2)) + 0.2);  // Scale factor
       v = Math.min(v, 1); // Limiting
       // Smoothing
       if (v > levels[i]) levels[i] = v * 0.9 + levels[i] * 0.1;
