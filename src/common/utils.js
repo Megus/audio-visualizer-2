@@ -92,10 +92,19 @@ function compileFragmentShader(gl, str) {
   return shader;
 }
 
+function rndRange(min, max) {
+  return Math.random() * (max - min) + min;
+}
+
+function rndArrayItem(array) {
+  return array[Math.floor(Math.random() * array.length)];
+}
 
 export {
   toArrayBuffer,
   scaleImageInFrame,
   compileVertexShader,
   compileFragmentShader,
+  rndArrayItem,
+  rndRange,
 };

@@ -24,7 +24,19 @@ class FilterLayer extends Layer {
     gl.viewportHeight = this.canvas.height;
 
     // Load shaders
-    const shaderText = fs.readFileSync(`${folderPath}/${this.c.shader}`, "utf-8");
+    const searchPaths = [`${__dirname}/shaders`, folderPath];
+
+    let shaderText = "";
+
+    for (let c = 0; c < searchPaths.length; c++) {
+      try {
+        shaderText = fs.readFileSync(`${searchPaths[c]}/${this.c.shader}`, "utf-8");
+        break;
+      } catch (e) {
+
+      }
+    }
+
     const fragmentShader = utils.compileFragmentShader(gl, shaderText);
 
     const vertexShaderText = fs.readFileSync(`${__dirname}/shaders/simple_vertex.glsl`, "utf-8");

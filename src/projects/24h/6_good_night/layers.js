@@ -1,6 +1,7 @@
 import * as L from "../../../common/layers";
 import MegusLogo from "../../layers/MegusLogo";
 import TrackTitle from "../../layers/TrackTitle";
+import MetaBalls from "../../layers/MetaBalls";
 
 const layers = [
   {
@@ -40,7 +41,7 @@ const layers = [
         p: { alpha: 0.15, size: [1600, 1600] }
       },
       {
-        layer: L.MetaBalls,
+        layer: MetaBalls,
         id: "metaballs",
         c: { ballsCount: 12*6 },
         p: { alpha: 0.8, ballScale: 0.01 }

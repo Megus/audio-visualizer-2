@@ -22,6 +22,15 @@ class TrackTitle extends Layer {
     this.textPos = [-1, 0];
     this.barPos = [-1, 0];
 
+    // Measure text
+    const ctx = this.canvas.getContext("2d");
+    ctx.font = "64px title";
+    ctx.textAlign = "left";
+    ctx.textBaseline = "top";
+    ctx.direction = "ltr";
+    const metrics = ctx.measureText(this.c.title);
+    this.textMetrics = metrics;
+
     this.scriptSystem.addScript(this.mainScript.bind(this));
   }
 
@@ -43,19 +52,25 @@ class TrackTitle extends Layer {
     const ctx = this.canvas.getContext("2d");
     ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
 
+    const width = this.textMetrics.width;
+    const height = 64;
+    const padding = 50;
+    const barPadding = 200;
+    const fullWidth = width + padding * 2 + height;
+
     ctx.shadowBlur = 20;
     ctx.shadowColor = "rgba(0,0,0,0.5)";
     ctx.shadowOffsetX = 4;
     ctx.shadowOffsetY = 4;
 
     ctx.fillStyle = "rgba(50,100,160,1)";
-    const barX = this.barPos[0] * 500 - 100;
-    const barY = this.barPos[1] + 28;
+    const barX = this.barPos[0] * fullWidth - barPadding;
+    const barY = this.barPos[1] + (height / 2) - 4;
     ctx.beginPath();
     ctx.moveTo(barX, barY);
-    ctx.lineTo(barX + 500 + 64, barY);
-    ctx.lineTo(barX + 500, barY + 64);
-    ctx.lineTo(barX, barY + 64);
+    ctx.lineTo(barX + fullWidth + barPadding, barY);
+    ctx.lineTo(barX + fullWidth - height + barPadding, barY + height);
+    ctx.lineTo(barX, barY + height);
     ctx.closePath();
     ctx.fill();
 
@@ -68,7 +83,7 @@ class TrackTitle extends Layer {
     ctx.textBaseline = "top";
     ctx.direction = "ltr";
 
-    const textX = this.textPos[0] * 500 + 50;
+    const textX = this.textPos[0] * (width + padding * 2) + padding;
     const textY = this.textPos[1];
 
     ctx.fillText(this.c.title, textX, textY, this.canvas.width);
